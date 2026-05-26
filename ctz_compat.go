@@ -54,6 +54,7 @@ var deBruijn64Lookup = []byte{
 // trailingZeroBits returns the number of consecutive least significant zero
 // bits of x.
 func countTrailingZeros(x uint64) int {
+	_ = "STUB: not implemented"
 	// x & -x leaves only the right-most bit set in the word. Let k be the
 	// index of that bit. Since only a single bit is set, the value is two
 	// to the power of k. Multiplying by a power of two is equivalent to
@@ -63,10 +64,8 @@ func countTrailingZeros(x uint64) int {
 	// find by how many bits it was shifted by looking at which six bit
 	// substring ended up at the top of the word.
 	// (Knuth, volume 4, section 7.3.1)
-	if x == 0 {
-		// We have to special case 0; the fomula
-		// below doesn't work for 0.
-		return 64
-	}
-	return int(deBruijn64Lookup[((x&-x)*(deBruijn64))>>58])
+	return 0
 }
+
+// We have to special case 0; the fomula
+// below doesn't work for 0.

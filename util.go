@@ -1,10 +1,7 @@
 package roaring
 
 import (
-	"cmp"
 	"math"
-	"math/rand"
-	"slices"
 )
 
 const (
@@ -39,270 +36,93 @@ const (
 const maxWord = 1<<wordSizeInBits - 1
 
 // doesn't apply to runContainers
-func getSizeInBytesFromCardinality(card int) int {
-	if card > arrayDefaultMaxSize {
-		// bitmapContainer
-		return maxCapacity / 8
-	}
-	// arrayContainer
-	return 2 * card
-}
+func getSizeInBytesFromCardinality(card int) int { _ = "STUB: not implemented"; return 0 }
 
-func fill(arr []uint64, val uint64) {
-	for i := range arr {
-		arr[i] = val
-	}
-}
+// bitmapContainer
 
-func fillRange(arr []uint64, start, end int, val uint64) {
-	for i := start; i < end; i++ {
-		arr[i] = val
-	}
-}
+// arrayContainer
 
-func fillArrayAND(container []uint16, bitmap1, bitmap2 []uint64) {
-	if len(bitmap1) != len(bitmap2) {
-		panic("array lengths don't match")
-	}
-	// TODO: rewrite in assembly
-	pos := 0
-	for k := range bitmap1 {
-		bitset := bitmap1[k] & bitmap2[k]
-		for bitset != 0 {
-			t := bitset & -bitset
-			container[pos] = uint16((k*64 + int(popcount(t-1))))
-			pos = pos + 1
-			bitset ^= t
-		}
-	}
-}
+func fill(arr []uint64, val uint64) { _ = "STUB: not implemented"; return }
+
+func fillRange(arr []uint64, start, end int, val uint64) { _ = "STUB: not implemented"; return }
+
+func fillArrayAND(container []uint16, bitmap1, bitmap2 []uint64) { _ = "STUB: not implemented"; return }
+
+// TODO: rewrite in assembly
 
 func fillArrayANDNOT(container []uint16, bitmap1, bitmap2 []uint64) {
-	if len(bitmap1) != len(bitmap2) {
-		panic("array lengths don't match")
-	}
-	// TODO: rewrite in assembly
-	pos := 0
-	for k := range bitmap1 {
-		bitset := bitmap1[k] &^ bitmap2[k]
-		for bitset != 0 {
-			t := bitset & -bitset
-			container[pos] = uint16((k*64 + int(popcount(t-1))))
-			pos = pos + 1
-			bitset ^= t
-		}
-	}
+	_ = "STUB: not implemented"
+	return
 }
 
-func fillArrayXOR(container []uint16, bitmap1, bitmap2 []uint64) {
-	if len(bitmap1) != len(bitmap2) {
-		panic("array lengths don't match")
-	}
-	// TODO: rewrite in assembly
-	pos := 0
-	for k := 0; k < len(bitmap1); k++ {
-		bitset := bitmap1[k] ^ bitmap2[k]
-		for bitset != 0 {
-			t := bitset & -bitset
-			container[pos] = uint16((k*64 + int(popcount(t-1))))
-			pos = pos + 1
-			bitset ^= t
-		}
-	}
-}
+// TODO: rewrite in assembly
 
-func highbits(x uint32) uint16 {
-	return uint16(x >> 16)
-}
+func fillArrayXOR(container []uint16, bitmap1, bitmap2 []uint64) { _ = "STUB: not implemented"; return }
 
-func lowbits(x uint32) uint16 {
-	return uint16(x & maxLowBit)
-}
+// TODO: rewrite in assembly
 
-func combineLoHi16(lob uint16, hob uint16) uint32 {
-	return combineLoHi32(uint32(lob), uint32(hob))
-}
+func highbits(x uint32) uint16 { _ = "STUB: not implemented"; return 0 }
 
-func combineLoHi32(lob uint32, hob uint32) uint32 {
-	return lob | (hob << 16)
-}
+func lowbits(x uint32) uint16 { _ = "STUB: not implemented"; return 0 }
+
+func combineLoHi16(lob uint16, hob uint16) uint32 { _ = "STUB: not implemented"; return 0 }
+
+func combineLoHi32(lob uint32, hob uint32) uint32 { _ = "STUB: not implemented"; return 0 }
 
 const maxLowBit = 0xFFFF
 
-func flipBitmapRange(bitmap []uint64, start int, end int) {
-	if start >= end {
-		return
-	}
-	firstword := start / 64
-	endword := (end - 1) / 64
-	bitmap[firstword] ^= ^(^uint64(0) << uint(start%64))
-	for i := firstword; i < endword; i++ {
-		bitmap[i] = ^bitmap[i]
-	}
-	bitmap[endword] ^= ^uint64(0) >> (uint(-end) % 64)
-}
+func flipBitmapRange(bitmap []uint64, start int, end int) { _ = "STUB: not implemented"; return }
 
-func resetBitmapRange(bitmap []uint64, start int, end int) {
-	if start >= end {
-		return
-	}
-	firstword := start / 64
-	endword := (end - 1) / 64
-	if firstword == endword {
-		bitmap[firstword] &= ^((^uint64(0) << uint(start%64)) & (^uint64(0) >> (uint(-end) % 64)))
-		return
-	}
-	bitmap[firstword] &= ^(^uint64(0) << uint(start%64))
-	for i := firstword + 1; i < endword; i++ {
-		bitmap[i] = 0
-	}
-	bitmap[endword] &= ^(^uint64(0) >> (uint(-end) % 64))
-}
+func resetBitmapRange(bitmap []uint64, start int, end int) { _ = "STUB: not implemented"; return }
 
-func setBitmapRange(bitmap []uint64, start int, end int) {
-	if start >= end {
-		return
-	}
-	firstword := start / 64
-	endword := (end - 1) / 64
-	if firstword == endword {
-		bitmap[firstword] |= (^uint64(0) << uint(start%64)) & (^uint64(0) >> (uint(-end) % 64))
-		return
-	}
-	bitmap[firstword] |= ^uint64(0) << uint(start%64)
-	for i := firstword + 1; i < endword; i++ {
-		bitmap[i] = ^uint64(0)
-	}
-	bitmap[endword] |= ^uint64(0) >> (uint(-end) % 64)
-}
+func setBitmapRange(bitmap []uint64, start int, end int) { _ = "STUB: not implemented"; return }
 
 func flipBitmapRangeAndCardinalityChange(bitmap []uint64, start int, end int) int {
-	before := wordCardinalityForBitmapRange(bitmap, start, end)
-	flipBitmapRange(bitmap, start, end)
-	after := wordCardinalityForBitmapRange(bitmap, start, end)
-	return int(after - before)
+	_ = "STUB: not implemented"
+	return 0
 }
 
 func resetBitmapRangeAndCardinalityChange(bitmap []uint64, start int, end int) int {
-	before := wordCardinalityForBitmapRange(bitmap, start, end)
-	resetBitmapRange(bitmap, start, end)
-	after := wordCardinalityForBitmapRange(bitmap, start, end)
-	return int(after - before)
+	_ = "STUB: not implemented"
+	return 0
 }
 
 func setBitmapRangeAndCardinalityChange(bitmap []uint64, start int, end int) int {
-	before := wordCardinalityForBitmapRange(bitmap, start, end)
-	setBitmapRange(bitmap, start, end)
-	after := wordCardinalityForBitmapRange(bitmap, start, end)
-	return int(after - before)
+	_ = "STUB: not implemented"
+	return 0
 }
 
 func wordCardinalityForBitmapRange(bitmap []uint64, start int, end int) uint64 {
-	answer := uint64(0)
-	if start >= end {
-		return answer
-	}
-	firstword := start / 64
-	endword := (end - 1) / 64
-	for i := firstword; i <= endword; i++ {
-		answer += popcount(bitmap[i])
-	}
-	return answer
+	_ = "STUB: not implemented"
+	return 0
 }
 
 func selectBitPosition(w uint64, j int) int {
-	seen := 0
+	_ = "STUB: not implemented"
 
 	// Divide 64bit
-	part := w & 0xFFFFFFFF
-	n := popcount(part)
-	if n <= uint64(j) {
-		part = w >> 32
-		seen += 32
-		j -= int(n)
-	}
-	w = part
-
-	// Divide 32bit
-	part = w & 0xFFFF
-	n = popcount(part)
-	if n <= uint64(j) {
-		part = w >> 16
-		seen += 16
-		j -= int(n)
-	}
-	w = part
-
-	// Divide 16bit
-	part = w & 0xFF
-	n = popcount(part)
-	if n <= uint64(j) {
-		part = w >> 8
-		seen += 8
-		j -= int(n)
-	}
-	w = part
-
-	// Lookup in final byte
-	var counter uint
-	for counter = 0; counter < 8; counter++ {
-		j -= int((w >> counter) & 1)
-		if j < 0 {
-			break
-		}
-	}
-	return seen + int(counter)
+	return 0
 }
 
-func panicOn(err error) {
-	if err != nil {
-		panic(err)
-	}
-}
+// Divide 32bit
+
+// Divide 16bit
+
+// Lookup in final byte
+
+func panicOn(err error) { _ = "STUB: not implemented"; return }
 
 type ph struct {
 	orig int
 	rand int
 }
 
-func getRandomPermutation(n int) []int {
-	r := make([]ph, n)
-	for i := 0; i < n; i++ {
-		r[i].orig = i
-		r[i].rand = rand.Intn(1 << 29)
-	}
-	slices.SortFunc(r, func(a, b ph) int { return cmp.Compare(a.rand, b.rand) })
-	m := make([]int, n)
-	for i := range m {
-		m[i] = r[i].orig
-	}
-	return m
-}
+func getRandomPermutation(n int) []int { _ = "STUB: not implemented"; return nil }
 
-func minOfInt(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
-}
+func minOfInt(a, b int) int { _ = "STUB: not implemented"; return 0 }
 
-func maxOfInt(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
+func maxOfInt(a, b int) int { _ = "STUB: not implemented"; return 0 }
 
-func maxOfUint16(a, b uint16) uint16 {
-	if a > b {
-		return a
-	}
-	return b
-}
+func maxOfUint16(a, b uint16) uint16 { _ = "STUB: not implemented"; return 0 }
 
-func minOfUint16(a, b uint16) uint16 {
-	if a < b {
-		return a
-	}
-	return b
-}
+func minOfUint16(a, b uint16) uint16 { _ = "STUB: not implemented"; return 0 }

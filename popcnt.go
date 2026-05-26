@@ -6,8 +6,4 @@
 
 package roaring
 
-import "math/bits"
-
-func popcount(x uint64) uint64 {
-	return uint64(bits.OnesCount64(x))
-}
+func popcount(x uint64) uint64 { _ = "STUB: not implemented"; return 0 }

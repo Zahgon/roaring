@@ -34,9 +34,7 @@ type intIterator struct {
 }
 
 // HasNext returns true if there are more integers to iterate over
-func (ii *intIterator) HasNext() bool {
-	return ii.pos < ii.highlowcontainer.size()
-}
+func (ii *intIterator) HasNext() bool { _ = "STUB: not implemented"; return false }
 
 func (ii *intIterator) init() {
 	if ii.highlowcontainer.size() > ii.pos {
@@ -47,39 +45,13 @@ func (ii *intIterator) init() {
 }
 
 // Next returns the next integer
-func (ii *intIterator) Next() uint64 {
-	lowbits := ii.iter.Next()
-	x := uint64(lowbits) | ii.hs
-	if !ii.iter.HasNext() {
-		ii.pos = ii.pos + 1
-		ii.init()
-	}
-	return x
-}
+func (ii *intIterator) Next() uint64 { _ = "STUB: not implemented"; return 0 }
 
 // PeekNext peeks the next value without advancing the iterator
-func (ii *intIterator) PeekNext() uint64 {
-	return uint64(ii.iter.PeekNext()&maxLowBit) | ii.hs
-}
+func (ii *intIterator) PeekNext() uint64 { _ = "STUB: not implemented"; return 0 }
 
 // AdvanceIfNeeded advances as long as the next value is smaller than minval
-func (ii *intIterator) AdvanceIfNeeded(minval uint64) {
-	to := minval >> 32
-
-	for ii.HasNext() && (ii.hs>>32) < to {
-		ii.pos++
-		ii.init()
-	}
-
-	if ii.HasNext() && (ii.hs>>32) == to {
-		ii.iter.AdvanceIfNeeded(lowbits(minval))
-
-		if !ii.iter.HasNext() {
-			ii.pos++
-			ii.init()
-		}
-	}
-}
+func (ii *intIterator) AdvanceIfNeeded(minval uint64) { _ = "STUB: not implemented"; return }
 
 // IntIterator64 is meant to allow you to iterate through the values of a bitmap, see Initialize(a *Bitmap)
 type IntIterator64 = intIterator
@@ -87,17 +59,9 @@ type IntIterator64 = intIterator
 // Initialize configures the existing iterator so that it can iterate through the values of
 // the provided bitmap.
 // The iteration results are undefined if the bitmap is modified (e.g., with Add or Remove).
-func (ii *intIterator) Initialize(a *Bitmap) {
-	ii.pos = 0
-	ii.highlowcontainer = &a.highlowcontainer
-	ii.init()
-}
+func (ii *intIterator) Initialize(a *Bitmap) { _ = "STUB: not implemented"; return }
 
-func newIntIterator(a *Bitmap) *intIterator {
-	p := new(intIterator)
-	p.Initialize(a)
-	return p
-}
+func newIntIterator(a *Bitmap) *intIterator { _ = "STUB: not implemented"; return nil }
 
 type intReverseIterator struct {
 	pos              int
@@ -110,9 +74,7 @@ type intReverseIterator struct {
 }
 
 // HasNext returns true if there are more integers to iterate over
-func (ii *intReverseIterator) HasNext() bool {
-	return ii.pos >= 0
-}
+func (ii *intReverseIterator) HasNext() bool { _ = "STUB: not implemented"; return false }
 
 func (ii *intReverseIterator) init() {
 	if ii.pos >= 0 {
@@ -125,14 +87,7 @@ func (ii *intReverseIterator) init() {
 }
 
 // Next returns the next integer
-func (ii *intReverseIterator) Next() uint64 {
-	x := uint64(ii.iter.Next()) | ii.hs
-	if !ii.iter.HasNext() {
-		ii.pos = ii.pos - 1
-		ii.init()
-	}
-	return x
-}
+func (ii *intReverseIterator) Next() uint64 { _ = "STUB: not implemented"; return 0 }
 
 // IntReverseIterator64 is meant to allow you to iterate through the values of a bitmap in reverse, see Initialize(a *Bitmap)
 type IntReverseIterator64 = intReverseIterator
@@ -140,17 +95,9 @@ type IntReverseIterator64 = intReverseIterator
 // Initialize configures the existing iterator so that it can iterate through the values of
 // the provided bitmap in reverse.
 // The iteration results are undefined if the bitmap is modified (e.g., with Add or Remove).
-func (ii *intReverseIterator) Initialize(a *Bitmap) {
-	ii.highlowcontainer = &a.highlowcontainer
-	ii.pos = a.highlowcontainer.size() - 1
-	ii.init()
-}
+func (ii *intReverseIterator) Initialize(a *Bitmap) { _ = "STUB: not implemented"; return }
 
-func newIntReverseIterator(a *Bitmap) *intReverseIterator {
-	p := new(intReverseIterator)
-	p.Initialize(a)
-	return p
-}
+func newIntReverseIterator(a *Bitmap) *intReverseIterator { _ = "STUB: not implemented"; return nil }
 
 // ManyIntIterable64 allows you to iterate over the values in a Bitmap
 type ManyIntIterable64 interface {
@@ -178,22 +125,7 @@ func (ii *manyIntIterator) init() {
 	}
 }
 
-func (ii *manyIntIterator) NextMany(buf []uint64) int {
-	n := 0
-	for n < len(buf) {
-		if ii.iter == nil {
-			break
-		}
-		moreN := ii.iter.NextMany64(ii.hs, buf[n:])
-		n += moreN
-		if moreN == 0 {
-			ii.pos = ii.pos + 1
-			ii.init()
-		}
-	}
-
-	return n
-}
+func (ii *manyIntIterator) NextMany(buf []uint64) int { _ = "STUB: not implemented"; return 0 }
 
 // ManyIntIterator64 is meant to allow you to iterate through the values of a bitmap, see Initialize(a *Bitmap)
 type ManyIntIterator64 = manyIntIterator
@@ -201,14 +133,6 @@ type ManyIntIterator64 = manyIntIterator
 // Initialize configures the existing iterator so that it can iterate through the values of
 // the provided bitmap.
 // The iteration results are undefined if the bitmap is modified (e.g., with Add or Remove).
-func (ii *manyIntIterator) Initialize(a *Bitmap) {
-	ii.pos = 0
-	ii.highlowcontainer = &a.highlowcontainer
-	ii.init()
-}
+func (ii *manyIntIterator) Initialize(a *Bitmap) { _ = "STUB: not implemented"; return }
 
-func newManyIntIterator(a *Bitmap) *manyIntIterator {
-	p := new(manyIntIterator)
-	p.Initialize(a)
-	return p
-}
+func newManyIntIterator(a *Bitmap) *manyIntIterator { _ = "STUB: not implemented"; return nil }

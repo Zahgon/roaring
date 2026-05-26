@@ -4,56 +4,27 @@
 package roaring
 
 import (
-	"encoding/binary"
 	"errors"
-	"fmt"
 	"io"
-	"unsafe"
 )
 
 func (ac *arrayContainer) writeTo(stream io.Writer) (int, error) {
-	buf := uint16SliceAsByteSlice(ac.content)
-	return stream.Write(buf)
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (bc *bitmapContainer) writeTo(stream io.Writer) (int, error) {
-	if bc.cardinality <= arrayDefaultMaxSize {
-		return 0, errors.New("refusing to write bitmap container with cardinality of array container")
-	}
-	buf := uint64SliceAsByteSlice(bc.bitmap)
-	return stream.Write(buf)
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
-func uint64SliceAsByteSlice(slice []uint64) []byte {
-	ptr := unsafe.SliceData(slice)
-	if ptr == nil {
-		return nil
-	}
-	const size = unsafe.Sizeof(uint64(0))
-	return unsafe.Slice(((*byte)(unsafe.Pointer(ptr))), int(size)*len(slice))
-}
+func uint64SliceAsByteSlice(slice []uint64) []byte { _ = "STUB: not implemented"; return nil }
 
-func uint16SliceAsByteSlice(slice []uint16) []byte {
-	ptr := unsafe.SliceData(slice)
-	if ptr == nil {
-		return nil
-	}
-	const size = unsafe.Sizeof(uint16(0))
-	return unsafe.Slice(((*byte)(unsafe.Pointer(ptr))), int(size)*len(slice))
-}
+func uint16SliceAsByteSlice(slice []uint16) []byte { _ = "STUB: not implemented"; return nil }
 
-func interval16SliceAsByteSlice(slice []interval16) []byte {
-	ptr := unsafe.SliceData(slice)
-	if ptr == nil {
-		return nil
-	}
-	const size = unsafe.Sizeof(interval16{})
-	return unsafe.Slice(((*byte)(unsafe.Pointer(ptr))), int(size)*len(slice))
-}
+func interval16SliceAsByteSlice(slice []interval16) []byte { _ = "STUB: not implemented"; return nil }
 
-func (bc *bitmapContainer) asLittleEndianByteSlice() []byte {
-	return uint64SliceAsByteSlice(bc.bitmap)
-}
+func (bc *bitmapContainer) asLittleEndianByteSlice() []byte { _ = "STUB: not implemented"; return nil }
 
 // Deserialization code follows
 
@@ -63,103 +34,39 @@ func (bc *bitmapContainer) asLittleEndianByteSlice() []byte {
 // ensure that the input slice does not get garbage collected, deleted
 // or modified while you hold the returned slince.
 // //
-func byteSliceAsUint16Slice(slice []byte) (result []uint16) { // here we create a new slice holder
-	const sz = int(unsafe.Sizeof(uint16(0)))
-	if len(slice)%sz != 0 {
-		panic(fmt.Sprintf("Slice size should be divisible by %d", sz))
-	}
-	ptr := unsafe.SliceData(slice)
-	if ptr == nil {
-		return nil
-	}
-	return unsafe.Slice((*uint16)(unsafe.Pointer(ptr)), len(slice)/sz)
+func byteSliceAsUint16Slice(slice []byte) (result []uint16) {
+	_ = "STUB: not implemented" // here we create a new slice holder
+	return nil
 }
 
-func byteSliceAsUint64Slice(slice []byte) (result []uint64) {
-	const sz = int(unsafe.Sizeof(uint64(0)))
-	if len(slice)%sz != 0 {
-		panic(fmt.Sprintf("Slice size should be divisible by %d", sz))
-	}
-	ptr := unsafe.SliceData(slice)
-	if ptr == nil {
-		return nil
-	}
-	return unsafe.Slice((*uint64)(unsafe.Pointer(ptr)), len(slice)/sz)
-}
+func byteSliceAsUint64Slice(slice []byte) (result []uint64) { _ = "STUB: not implemented"; return nil }
 
 func byteSliceAsInterval16Slice(slice []byte) (result []interval16) {
-	const sz = int(unsafe.Sizeof(interval16{}))
-	if len(slice)%sz != 0 {
-		panic(fmt.Sprintf("Slice size should be divisible by %d", sz))
-	}
-	ptr := unsafe.SliceData(slice)
-	if ptr == nil {
-		return nil
-	}
-	return unsafe.Slice((*interval16)(unsafe.Pointer(ptr)), len(slice)/sz)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 func byteSliceAsContainerSlice(slice []byte) (result []container) {
-	var c container
-	containerSize := int(unsafe.Sizeof(c))
-
-	if len(slice)%containerSize != 0 {
-		panic("Slice size should be divisible by unsafe.Sizeof(container)")
-	}
-	ptr := unsafe.SliceData(slice)
-	if ptr == nil {
-		return nil
-	}
-	return unsafe.Slice((*container)(unsafe.Pointer(ptr)), len(slice)/containerSize)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 func byteSliceAsBitsetSlice(slice []byte) (result []bitmapContainer) {
-	const bitsetSize = int(unsafe.Sizeof(bitmapContainer{}))
-	if len(slice)%bitsetSize != 0 {
-		panic("Slice size should be divisible by unsafe.Sizeof(bitmapContainer)")
-	}
-	ptr := unsafe.SliceData(slice)
-	if ptr == nil {
-		return nil
-	}
-	return unsafe.Slice((*bitmapContainer)(unsafe.Pointer(ptr)), len(slice)/bitsetSize)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 func byteSliceAsArraySlice(slice []byte) (result []arrayContainer) {
-	const arraySize = int(unsafe.Sizeof(arrayContainer{}))
-	if len(slice)%arraySize != 0 {
-		panic("Slice size should be divisible by unsafe.Sizeof(arrayContainer)")
-	}
-	ptr := unsafe.SliceData(slice)
-	if ptr == nil {
-		return nil
-	}
-	return unsafe.Slice((*arrayContainer)(unsafe.Pointer(ptr)), len(slice)/arraySize)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 func byteSliceAsRun16Slice(slice []byte) (result []runContainer16) {
-	const run16Size = int(unsafe.Sizeof(runContainer16{}))
-	if len(slice)%run16Size != 0 {
-		panic("Slice size should be divisible by unsafe.Sizeof(runContainer16)")
-	}
-	ptr := unsafe.SliceData(slice)
-	if ptr == nil {
-		return nil
-	}
-	return unsafe.Slice((*runContainer16)(unsafe.Pointer(ptr)), len(slice)/run16Size)
+	_ = "STUB: not implemented"
+	return nil
 }
 
-func byteSliceAsBoolSlice(slice []byte) (result []bool) {
-	const boolSize = int(unsafe.Sizeof(true))
-	if len(slice)%boolSize != 0 {
-		panic("Slice size should be divisible by unsafe.Sizeof(bool)")
-	}
-	ptr := unsafe.SliceData(slice)
-	if ptr == nil {
-		return nil
-	}
-	return unsafe.Slice((*bool)(unsafe.Pointer(ptr)), len(slice)/boolSize)
-}
+func byteSliceAsBoolSlice(slice []byte) (result []bool) { _ = "STUB: not implemented"; return nil }
 
 // FrozenView creates a static view of a serialized bitmap stored in buf.
 // It uses CRoaring's frozen bitmap format.
@@ -188,18 +95,9 @@ func byteSliceAsBoolSlice(slice []byte) (result []bool) {
 // bitmap derived from this bitmap (e.g., via Or, And) might
 // also be broken. Thus, before making buf unavailable, you should
 // call CloneCopyOnWriteContainers on all such bitmaps.
-func (rb *Bitmap) FrozenView(buf []byte) error {
-	return rb.highlowcontainer.frozenView(buf)
-}
+func (rb *Bitmap) FrozenView(buf []byte) error { _ = "STUB: not implemented"; return nil }
 
-func (rb *Bitmap) MustFrozenView(buf []byte) error {
-	if err := rb.FrozenView(buf); err != nil {
-		return err
-	}
-	err := rb.Validate()
-
-	return err
-}
+func (rb *Bitmap) MustFrozenView(buf []byte) error { _ = "STUB: not implemented"; return nil }
 
 /* Verbatim specification from CRoaring.
  *
@@ -249,316 +147,26 @@ var (
 	ErrFrozenBitmapBufferTooSmall = errors.New("buffer too small")
 )
 
-func (ra *roaringArray) frozenView(buf []byte) error {
-	if len(buf) < 4 {
-		return ErrFrozenBitmapIncomplete
-	}
+func (ra *roaringArray) frozenView(buf []byte) error { _ = "STUB: not implemented"; return nil }
 
-	headerBE := binary.BigEndian.Uint32(buf[len(buf)-4:])
-	if headerBE&0x7fff == frozenCookie {
-		return ErrFrozenBitmapBigEndian
-	}
+// 1 byte per type, 2 bytes per key, 2 bytes per count.
 
-	header := binary.LittleEndian.Uint32(buf[len(buf)-4:])
-	buf = buf[:len(buf)-4]
-
-	if header&0x7fff != frozenCookie {
-		return ErrFrozenBitmapInvalidCookie
-	}
-
-	nCont := int(header >> 15)
-	if nCont > (1 << 16) {
-		return ErrFrozenBitmapOverpopulated
-	}
-
-	// 1 byte per type, 2 bytes per key, 2 bytes per count.
-	if len(buf) < 5*nCont {
-		return ErrFrozenBitmapIncomplete
-	}
-
-	types := buf[len(buf)-nCont:]
-	buf = buf[:len(buf)-nCont]
-
-	counts := byteSliceAsUint16Slice(buf[len(buf)-2*nCont:])
-	buf = buf[:len(buf)-2*nCont]
-
-	keys := byteSliceAsUint16Slice(buf[len(buf)-2*nCont:])
-	buf = buf[:len(buf)-2*nCont]
-
-	nBitmap, nArray, nRun := 0, 0, 0
-	nArrayEl, nRunEl := 0, 0
-	for i, t := range types {
-		switch t {
-		case 1:
-			nBitmap++
-		case 2:
-			nArray++
-			nArrayEl += int(counts[i]) + 1
-		case 3:
-			nRun++
-			nRunEl += int(counts[i])
-		default:
-			return ErrFrozenBitmapInvalidTypecode
-		}
-	}
-
-	if len(buf) < (1<<13)*nBitmap+4*nRunEl+2*nArrayEl {
-		return ErrFrozenBitmapIncomplete
-	}
-
-	bitsetsArena := byteSliceAsUint64Slice(buf[:(1<<13)*nBitmap])
-	buf = buf[(1<<13)*nBitmap:]
-
-	runsArena := byteSliceAsInterval16Slice(buf[:4*nRunEl])
-	buf = buf[4*nRunEl:]
-
-	arraysArena := byteSliceAsUint16Slice(buf[:2*nArrayEl])
-	buf = buf[2*nArrayEl:]
-
-	if len(buf) != 0 {
-		return ErrFrozenBitmapUnexpectedData
-	}
-
-	var c container
-	containersSz := int(unsafe.Sizeof(c)) * nCont
-	bitsetsSz := int(unsafe.Sizeof(bitmapContainer{})) * nBitmap
-	arraysSz := int(unsafe.Sizeof(arrayContainer{})) * nArray
-	runsSz := int(unsafe.Sizeof(runContainer16{})) * nRun
-	needCOWSz := int(unsafe.Sizeof(true)) * nCont
-
-	bitmapArenaSz := containersSz + bitsetsSz + arraysSz + runsSz + needCOWSz
-	bitmapArena := make([]byte, bitmapArenaSz)
-
-	containers := byteSliceAsContainerSlice(bitmapArena[:containersSz])
-	bitmapArena = bitmapArena[containersSz:]
-
-	bitsets := byteSliceAsBitsetSlice(bitmapArena[:bitsetsSz])
-	bitmapArena = bitmapArena[bitsetsSz:]
-
-	arrays := byteSliceAsArraySlice(bitmapArena[:arraysSz])
-	bitmapArena = bitmapArena[arraysSz:]
-
-	runs := byteSliceAsRun16Slice(bitmapArena[:runsSz])
-	bitmapArena = bitmapArena[runsSz:]
-
-	needCOW := byteSliceAsBoolSlice(bitmapArena)
-
-	iBitset, iArray, iRun := 0, 0, 0
-	for i, t := range types {
-		needCOW[i] = true
-
-		switch t {
-		case 1:
-			containers[i] = &bitsets[iBitset]
-			bitsets[iBitset].cardinality = int(counts[i]) + 1
-			bitsets[iBitset].bitmap = bitsetsArena[:1024]
-			bitsetsArena = bitsetsArena[1024:]
-			iBitset++
-		case 2:
-			containers[i] = &arrays[iArray]
-			sz := int(counts[i]) + 1
-			arrays[iArray].content = arraysArena[:sz]
-			arraysArena = arraysArena[sz:]
-			iArray++
-		case 3:
-			containers[i] = &runs[iRun]
-			runs[iRun].iv = runsArena[:counts[i]]
-			runsArena = runsArena[counts[i]:]
-			iRun++
-		}
-	}
-
-	// Not consuming the full input is a bug.
-	if iBitset != nBitmap || len(bitsetsArena) != 0 ||
-		iArray != nArray || len(arraysArena) != 0 ||
-		iRun != nRun || len(runsArena) != 0 {
-		panic("we missed something")
-	}
-
-	ra.keys = keys
-	ra.containers = containers
-	ra.needCopyOnWrite = needCOW
-	ra.copyOnWrite = true
-
-	return nil
-}
+// Not consuming the full input is a bug.
 
 // GetFrozenSizeInBytes returns the size in bytes of the frozen bitmap.
-func (rb *Bitmap) GetFrozenSizeInBytes() uint64 {
-	nBits, nArrayEl, nRunEl := uint64(0), uint64(0), uint64(0)
-	for _, c := range rb.highlowcontainer.containers {
-		switch v := c.(type) {
-		case *bitmapContainer:
-			nBits++
-		case *arrayContainer:
-			nArrayEl += uint64(len(v.content))
-		case *runContainer16:
-			nRunEl += uint64(len(v.iv))
-		}
-	}
-	return 4 + 5*uint64(len(rb.highlowcontainer.containers)) +
-		(nBits << 13) + 2*nArrayEl + 4*nRunEl
-}
+func (rb *Bitmap) GetFrozenSizeInBytes() uint64 { _ = "STUB: not implemented"; return 0 }
 
 // Freeze serializes the bitmap in the CRoaring's frozen format.
-func (rb *Bitmap) Freeze() ([]byte, error) {
-	sz := rb.GetFrozenSizeInBytes()
-	buf := make([]byte, sz)
-	_, err := rb.FreezeTo(buf)
-	return buf, err
-}
+func (rb *Bitmap) Freeze() ([]byte, error) { _ = "STUB: not implemented"; return nil, nil }
 
 // FreezeTo serializes the bitmap in the CRoaring's frozen format.
-func (rb *Bitmap) FreezeTo(buf []byte) (int, error) {
-	containers := rb.highlowcontainer.containers
-	nCont := len(containers)
-
-	nBits, nArrayEl, nRunEl := 0, 0, 0
-	for _, c := range containers {
-		switch v := c.(type) {
-		case *bitmapContainer:
-			nBits++
-		case *arrayContainer:
-			nArrayEl += len(v.content)
-		case *runContainer16:
-			nRunEl += len(v.iv)
-		}
-	}
-
-	serialSize := 4 + 5*nCont + (1<<13)*nBits + 4*nRunEl + 2*nArrayEl
-	if len(buf) < serialSize {
-		return 0, ErrFrozenBitmapBufferTooSmall
-	}
-
-	bitsArena := byteSliceAsUint64Slice(buf[:(1<<13)*nBits])
-	buf = buf[(1<<13)*nBits:]
-
-	runsArena := byteSliceAsInterval16Slice(buf[:4*nRunEl])
-	buf = buf[4*nRunEl:]
-
-	arraysArena := byteSliceAsUint16Slice(buf[:2*nArrayEl])
-	buf = buf[2*nArrayEl:]
-
-	keys := byteSliceAsUint16Slice(buf[:2*nCont])
-	buf = buf[2*nCont:]
-
-	counts := byteSliceAsUint16Slice(buf[:2*nCont])
-	buf = buf[2*nCont:]
-
-	types := buf[:nCont]
-	buf = buf[nCont:]
-
-	header := uint32(frozenCookie | (nCont << 15))
-	binary.LittleEndian.PutUint32(buf[:4], header)
-
-	copy(keys, rb.highlowcontainer.keys[:])
-
-	for i, c := range containers {
-		switch v := c.(type) {
-		case *bitmapContainer:
-			copy(bitsArena, v.bitmap)
-			bitsArena = bitsArena[1024:]
-			counts[i] = uint16(v.cardinality - 1)
-			types[i] = 1
-		case *arrayContainer:
-			copy(arraysArena, v.content)
-			arraysArena = arraysArena[len(v.content):]
-			elems := len(v.content)
-			counts[i] = uint16(elems - 1)
-			types[i] = 2
-		case *runContainer16:
-			copy(runsArena, v.iv)
-			runs := len(v.iv)
-			runsArena = runsArena[runs:]
-			counts[i] = uint16(runs)
-			types[i] = 3
-		}
-	}
-
-	return serialSize, nil
-}
+func (rb *Bitmap) FreezeTo(buf []byte) (int, error) { _ = "STUB: not implemented"; return 0, nil }
 
 // WriteFrozenTo serializes the bitmap in the CRoaring's frozen format.
 func (rb *Bitmap) WriteFrozenTo(wr io.Writer) (int, error) {
+	_ = "STUB: not implemented"
 	// FIXME: this is a naive version that iterates 4 times through the
 	// containers and allocates 3*len(containers) bytes; it's quite likely
 	// it can be done more efficiently.
-	containers := rb.highlowcontainer.containers
-	written := 0
-
-	for _, c := range containers {
-		c, ok := c.(*bitmapContainer)
-		if !ok {
-			continue
-		}
-		n, err := wr.Write(uint64SliceAsByteSlice(c.bitmap))
-		written += n
-		if err != nil {
-			return written, err
-		}
-	}
-
-	for _, c := range containers {
-		c, ok := c.(*runContainer16)
-		if !ok {
-			continue
-		}
-		n, err := wr.Write(interval16SliceAsByteSlice(c.iv))
-		written += n
-		if err != nil {
-			return written, err
-		}
-	}
-
-	for _, c := range containers {
-		c, ok := c.(*arrayContainer)
-		if !ok {
-			continue
-		}
-		n, err := wr.Write(uint16SliceAsByteSlice(c.content))
-		written += n
-		if err != nil {
-			return written, err
-		}
-	}
-
-	n, err := wr.Write(uint16SliceAsByteSlice(rb.highlowcontainer.keys))
-	written += n
-	if err != nil {
-		return written, err
-	}
-
-	countTypeBuf := make([]byte, 3*len(containers))
-	counts := byteSliceAsUint16Slice(countTypeBuf[:2*len(containers)])
-	types := countTypeBuf[2*len(containers):]
-
-	for i, c := range containers {
-		switch c := c.(type) {
-		case *bitmapContainer:
-			counts[i] = uint16(c.cardinality - 1)
-			types[i] = 1
-		case *arrayContainer:
-			elems := len(c.content)
-			counts[i] = uint16(elems - 1)
-			types[i] = 2
-		case *runContainer16:
-			runs := len(c.iv)
-			counts[i] = uint16(runs)
-			types[i] = 3
-		}
-	}
-
-	n, err = wr.Write(countTypeBuf)
-	written += n
-	if err != nil {
-		return written, err
-	}
-
-	header := uint32(frozenCookie | (len(containers) << 15))
-	if err := binary.Write(wr, binary.LittleEndian, header); err != nil {
-		return written, err
-	}
-	written += 4
-
-	return written, nil
+	return 0, nil
 }

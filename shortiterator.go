@@ -16,40 +16,22 @@ type shortIterator struct {
 	loc   int
 }
 
-func (si *shortIterator) hasNext() bool {
-	return si.loc < len(si.slice)
-}
+func (si *shortIterator) hasNext() bool { _ = "STUB: not implemented"; return false }
 
-func (si *shortIterator) next() uint16 {
-	a := si.slice[si.loc]
-	si.loc++
-	return a
-}
+func (si *shortIterator) next() uint16 { _ = "STUB: not implemented"; return 0 }
 
-func (si *shortIterator) peekNext() uint16 {
-	return si.slice[si.loc]
-}
+func (si *shortIterator) peekNext() uint16 { _ = "STUB: not implemented"; return 0 }
 
-func (si *shortIterator) advanceIfNeeded(minval uint16) {
-	if si.hasNext() && si.peekNext() < minval {
-		si.loc = advanceUntil(si.slice, si.loc, len(si.slice), minval)
-	}
-}
+func (si *shortIterator) advanceIfNeeded(minval uint16) { _ = "STUB: not implemented"; return }
 
 type reverseIterator struct {
 	slice []uint16
 	loc   int
 }
 
-func (si *reverseIterator) hasNext() bool {
-	return si.loc >= 0
-}
+func (si *reverseIterator) hasNext() bool { _ = "STUB: not implemented"; return false }
 
-func (si *reverseIterator) next() uint16 {
-	a := si.slice[si.loc]
-	si.loc--
-	return a
-}
+func (si *reverseIterator) next() uint16 { _ = "STUB: not implemented"; return 0 }
 
 type arrayContainerUnsetIterator struct {
 	content []uint16
@@ -59,44 +41,18 @@ type arrayContainerUnsetIterator struct {
 	nextVal int
 }
 
-func (acui *arrayContainerUnsetIterator) next() uint16 {
-	val := acui.nextVal
-	acui.nextVal++
-	for acui.pos < len(acui.content) && uint16(acui.nextVal) >= acui.content[acui.pos] {
-		acui.nextVal++
-		acui.pos++
-	}
-	return uint16(val)
-}
+func (acui *arrayContainerUnsetIterator) next() uint16 { _ = "STUB: not implemented"; return 0 }
 
-func (acui *arrayContainerUnsetIterator) hasNext() bool {
-	return acui.nextVal < 65536
-}
+func (acui *arrayContainerUnsetIterator) hasNext() bool { _ = "STUB: not implemented"; return false }
 
-func (acui *arrayContainerUnsetIterator) peekNext() uint16 {
-	return uint16(acui.nextVal)
-}
+func (acui *arrayContainerUnsetIterator) peekNext() uint16 { _ = "STUB: not implemented"; return 0 }
 
 func (acui *arrayContainerUnsetIterator) advanceIfNeeded(minval uint16) {
-	if !acui.hasNext() || acui.peekNext() >= minval {
-		return
-	}
-	acui.nextVal = int(minval)
-	acui.pos = binarySearch(acui.content, minval)
-	if acui.pos < 0 {
-		acui.pos = -acui.pos - 1
-	}
-	for acui.pos < len(acui.content) && uint16(acui.nextVal) >= acui.content[acui.pos] {
-		acui.nextVal++
-		acui.pos++
-	}
+	_ = "STUB: not implemented"
+	return
 }
 
 func newArrayContainerUnsetIterator(content []uint16) *arrayContainerUnsetIterator {
-	acui := &arrayContainerUnsetIterator{content: content, pos: 0, nextVal: 0}
-	for acui.pos < len(acui.content) && uint16(acui.nextVal) >= acui.content[acui.pos] {
-		acui.nextVal++
-		acui.pos++
-	}
-	return acui
+	_ = "STUB: not implemented"
+	return nil
 }

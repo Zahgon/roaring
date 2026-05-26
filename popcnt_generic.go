@@ -3,22 +3,12 @@
 
 package roaring
 
-func popcntSlice(s []uint64) uint64 {
-	return popcntSliceGo(s)
-}
+func popcntSlice(s []uint64) uint64 { _ = "STUB: not implemented"; return 0 }
 
-func popcntMaskSlice(s, m []uint64) uint64 {
-	return popcntMaskSliceGo(s, m)
-}
+func popcntMaskSlice(s, m []uint64) uint64 { _ = "STUB: not implemented"; return 0 }
 
-func popcntAndSlice(s, m []uint64) uint64 {
-	return popcntAndSliceGo(s, m)
-}
+func popcntAndSlice(s, m []uint64) uint64 { _ = "STUB: not implemented"; return 0 }
 
-func popcntOrSlice(s, m []uint64) uint64 {
-	return popcntOrSliceGo(s, m)
-}
+func popcntOrSlice(s, m []uint64) uint64 { _ = "STUB: not implemented"; return 0 }
 
-func popcntXorSlice(s, m []uint64) uint64 {
-	return popcntXorSliceGo(s, m)
-}
+func popcntXorSlice(s, m []uint64) uint64 { _ = "STUB: not implemented"; return 0 }

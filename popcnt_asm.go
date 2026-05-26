@@ -32,37 +32,12 @@ func popcntOrSliceAsm(s, m []uint64) uint64
 
 func popcntXorSliceAsm(s, m []uint64) uint64
 
-func popcntSlice(s []uint64) uint64 {
-	if useAsm {
-		return popcntSliceAsm(s)
-	}
-	return popcntSliceGo(s)
-}
+func popcntSlice(s []uint64) uint64 { _ = "STUB: not implemented"; return 0 }
 
-func popcntMaskSlice(s, m []uint64) uint64 {
-	if useAsm {
-		return popcntMaskSliceAsm(s, m)
-	}
-	return popcntMaskSliceGo(s, m)
-}
+func popcntMaskSlice(s, m []uint64) uint64 { _ = "STUB: not implemented"; return 0 }
 
-func popcntAndSlice(s, m []uint64) uint64 {
-	if useAsm {
-		return popcntAndSliceAsm(s, m)
-	}
-	return popcntAndSliceGo(s, m)
-}
+func popcntAndSlice(s, m []uint64) uint64 { _ = "STUB: not implemented"; return 0 }
 
-func popcntOrSlice(s, m []uint64) uint64 {
-	if useAsm {
-		return popcntOrSliceAsm(s, m)
-	}
-	return popcntOrSliceGo(s, m)
-}
+func popcntOrSlice(s, m []uint64) uint64 { _ = "STUB: not implemented"; return 0 }
 
-func popcntXorSlice(s, m []uint64) uint64 {
-	if useAsm {
-		return popcntXorSliceAsm(s, m)
-	}
-	return popcntXorSliceGo(s, m)
-}
+func popcntXorSlice(s, m []uint64) uint64 { _ = "STUB: not implemented"; return 0 }

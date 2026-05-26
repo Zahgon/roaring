@@ -1,7 +1,6 @@
 package internal
 
 import (
-	"encoding/binary"
 	"io"
 )
 
@@ -27,19 +26,12 @@ type ByteInput interface {
 
 // NewByteInputFromReader creates reader wrapper
 func NewByteInputFromReader(reader io.Reader) ByteInput {
-	return &ByteInputAdapter{
-		r:         reader,
-		readBytes: 0,
-	}
+	_ = "STUB: not implemented"
+	return *new(ByteInput)
 }
 
 // NewByteInput creates raw bytes wrapper
-func NewByteInput(buf []byte) ByteInput {
-	return &ByteBuffer{
-		buf: buf,
-		off: 0,
-	}
-}
+func NewByteInput(buf []byte) ByteInput { _ = "STUB: not implemented"; return *new(ByteInput) }
 
 // ByteBuffer raw bytes wrapper
 type ByteBuffer struct {
@@ -48,92 +40,39 @@ type ByteBuffer struct {
 }
 
 // NewByteBuffer creates a new ByteBuffer.
-func NewByteBuffer(buf []byte) *ByteBuffer {
-	return &ByteBuffer{
-		buf: buf,
-	}
-}
+func NewByteBuffer(buf []byte) *ByteBuffer { _ = "STUB: not implemented"; return nil }
 
 var _ io.Reader = (*ByteBuffer)(nil)
 
 // Read implements io.Reader.
-func (b *ByteBuffer) Read(p []byte) (int, error) {
-	data, err := b.Next(len(p))
-	if err != nil {
-		return 0, err
-	}
-	copy(p, data)
-	return len(data), nil
-}
+func (b *ByteBuffer) Read(p []byte) (int, error) { _ = "STUB: not implemented"; return 0, nil }
 
 // Next returns a slice containing the next n bytes from the reader
 // If there are fewer bytes than the given n, io.ErrUnexpectedEOF will be returned
-func (b *ByteBuffer) Next(n int) ([]byte, error) {
-	m := len(b.buf) - b.off
-
-	if n > m {
-		return nil, io.ErrUnexpectedEOF
-	}
-
-	data := b.buf[b.off : b.off+n]
-	b.off += n
-
-	return data, nil
-}
+func (b *ByteBuffer) Next(n int) ([]byte, error) { _ = "STUB: not implemented"; return nil, nil }
 
 // NextReturnsSafeSlice returns false since ByteBuffer might hold
 // an array owned by some other systems.
 func (b *ByteBuffer) NextReturnsSafeSlice() bool {
+	_ = "STUB: not implemented"
+
+	// ReadUInt32 reads uint32 with LittleEndian order
 	return false
 }
 
-// ReadUInt32 reads uint32 with LittleEndian order
-func (b *ByteBuffer) ReadUInt32() (uint32, error) {
-	if len(b.buf)-b.off < 4 {
-		return 0, io.ErrUnexpectedEOF
-	}
-
-	v := binary.LittleEndian.Uint32(b.buf[b.off:])
-	b.off += 4
-
-	return v, nil
-}
+func (b *ByteBuffer) ReadUInt32() (uint32, error) { _ = "STUB: not implemented"; return 0, nil }
 
 // ReadUInt16 reads uint16 with LittleEndian order
-func (b *ByteBuffer) ReadUInt16() (uint16, error) {
-	if len(b.buf)-b.off < 2 {
-		return 0, io.ErrUnexpectedEOF
-	}
-
-	v := binary.LittleEndian.Uint16(b.buf[b.off:])
-	b.off += 2
-
-	return v, nil
-}
+func (b *ByteBuffer) ReadUInt16() (uint16, error) { _ = "STUB: not implemented"; return 0, nil }
 
 // GetReadBytes returns read bytes
-func (b *ByteBuffer) GetReadBytes() int64 {
-	return int64(b.off)
-}
+func (b *ByteBuffer) GetReadBytes() int64 { _ = "STUB: not implemented"; return 0 }
 
 // SkipBytes skips exactly n bytes
-func (b *ByteBuffer) SkipBytes(n int) error {
-	m := len(b.buf) - b.off
-
-	if n > m {
-		return io.ErrUnexpectedEOF
-	}
-
-	b.off += n
-
-	return nil
-}
+func (b *ByteBuffer) SkipBytes(n int) error { _ = "STUB: not implemented"; return nil }
 
 // Reset resets the given buffer with a new byte slice
-func (b *ByteBuffer) Reset(buf []byte) {
-	b.buf = buf
-	b.off = 0
-}
+func (b *ByteBuffer) Reset(buf []byte) { _ = "STUB: not implemented"; return }
 
 // ByteInputAdapter reader wrapper
 type ByteInputAdapter struct {
@@ -145,71 +84,31 @@ type ByteInputAdapter struct {
 var _ io.Reader = (*ByteInputAdapter)(nil)
 
 // Read implements io.Reader.
-func (b *ByteInputAdapter) Read(buf []byte) (int, error) {
-	m, err := io.ReadAtLeast(b.r, buf, len(buf))
-	b.readBytes += m
-
-	if err != nil {
-		return 0, err
-	}
-
-	return m, nil
-}
+func (b *ByteInputAdapter) Read(buf []byte) (int, error) { _ = "STUB: not implemented"; return 0, nil }
 
 // Next returns a slice containing the next n bytes from the buffer,
 // advancing the buffer as if the bytes had been returned by Read.
-func (b *ByteInputAdapter) Next(n int) ([]byte, error) {
-	buf := make([]byte, n)
-	_, err := b.Read(buf)
-
-	if err != nil {
-		return nil, err
-	}
-	return buf, nil
-}
+func (b *ByteInputAdapter) Next(n int) ([]byte, error) { _ = "STUB: not implemented"; return nil, nil }
 
 // NextReturnsSafeSlice returns true since ByteInputAdapter always returns a slice
 // allocated with make([]byte, ...)
 func (b *ByteInputAdapter) NextReturnsSafeSlice() bool {
-	return true
+	_ = "STUB: not implemented"
+
+	// ReadUInt32 reads uint32 with LittleEndian order
+	return false
 }
 
-// ReadUInt32 reads uint32 with LittleEndian order
-func (b *ByteInputAdapter) ReadUInt32() (uint32, error) {
-	buf := b.buf[:4]
-	_, err := b.Read(buf)
-	if err != nil {
-		return 0, err
-	}
-
-	return binary.LittleEndian.Uint32(buf), nil
-}
+func (b *ByteInputAdapter) ReadUInt32() (uint32, error) { _ = "STUB: not implemented"; return 0, nil }
 
 // ReadUInt16 reads uint16 with LittleEndian order
-func (b *ByteInputAdapter) ReadUInt16() (uint16, error) {
-	buf := b.buf[:2]
-	_, err := b.Read(buf)
-	if err != nil {
-		return 0, err
-	}
-
-	return binary.LittleEndian.Uint16(buf), nil
-}
+func (b *ByteInputAdapter) ReadUInt16() (uint16, error) { _ = "STUB: not implemented"; return 0, nil }
 
 // GetReadBytes returns read bytes
-func (b *ByteInputAdapter) GetReadBytes() int64 {
-	return int64(b.readBytes)
-}
+func (b *ByteInputAdapter) GetReadBytes() int64 { _ = "STUB: not implemented"; return 0 }
 
 // SkipBytes skips exactly n bytes
-func (b *ByteInputAdapter) SkipBytes(n int) error {
-	_, err := b.Next(n)
-
-	return err
-}
+func (b *ByteInputAdapter) SkipBytes(n int) error { _ = "STUB: not implemented"; return nil }
 
 // Reset resets the given buffer with a new stream
-func (b *ByteInputAdapter) Reset(stream io.Reader) {
-	b.r = stream
-	b.readBytes = 0
-}
+func (b *ByteInputAdapter) Reset(stream io.Reader) { _ = "STUB: not implemented"; return }
